@@ -710,7 +710,7 @@
   failed_when: aesni_supported.rc > 1
   register: aesni_supported
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_role != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -742,7 +742,7 @@
   when:
   - aesni_supported.rc == 0
   - ansible_distribution == 'RedHat'
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_role != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -772,7 +772,7 @@
     name: dracut-fips
     state: present
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_role  != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -800,7 +800,7 @@
 - name: Rebuild initramfs
   command: dracut -f
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_role != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -830,7 +830,7 @@
   failed_when: false
   register: fipsargcheck
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -862,7 +862,7 @@
     replace: fips=1
   when:
   - fipsargcheck.rc == 0
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -894,7 +894,7 @@
     replace: \1 fips=1"
   when:
   - fipsargcheck.rc != 0
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -923,7 +923,7 @@
   command: findmnt --noheadings --output uuid --target /boot
   register: bootuuid
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -953,7 +953,7 @@
   failed_when: false
   register: bootargcheck
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -985,7 +985,7 @@
     replace: boot={{ bootuuid.stdout }}
   when:
   - bootargcheck.rc == 0
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -1017,7 +1017,7 @@
     replace: \1 boot=UUID={{ bootuuid.stdout }}"
   when:
   - bootargcheck.rc != 0
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
@@ -1045,7 +1045,7 @@
 - name: update bootloader menu
   command: /sbin/grubby --update-kernel=ALL --args="fips=1 boot=UUID={{ bootuuid.stdout }}"
   when:
-  - ansible_virtualization_role != "guest" or ansible_virtualization_type != "docker"
+  - ansible_virtualization_type != "docker"
   - high_complexity | bool
   - restrict_strategy | bool
   - reboot_required | bool
